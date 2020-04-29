@@ -6,7 +6,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-(local) server or localhost, e.g. by using [XAMPP](https://www.apachefriends.org/de/index.html) or if python installed use
+(local) server or localhost, e.g. by using [XAMPP](https://www.apachefriends.org/de/index.html) or if python installed use following command in your working directory
 
 ```
 # if Python version above 3.X
