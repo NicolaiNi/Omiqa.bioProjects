@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.bar {
+  fill: LightSteelblue;
+}
+
+.axis--x path {
+  display: none;
+}
+
+div.tooltip-barChart {
+     position: absolute;
+     text-align: center;
+     padding: .5rem;
+     background: #FFFFFF;
+     color: #313639;
+     border: 1px solid #313639;
+     border-radius: 8px;
+     pointer-events: none;
+     font-size: 1rem;
+}
+
+</style>
+<head>
+  <title>Visualization Tools</title>
+</head>
+<div id="barChart">
+  <h1>Total Gene Expression per Condition</h1>
+</div>
+
+<div id="heatMap">
+  <h1>Heat Map</h1>
+</div>
+
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="js/barChart.js"></script>

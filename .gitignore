@@ -1,0 +1,5 @@
+# ignore .vscode folder (just for debugging with vs code)
+.vscode/
+
+# ignore workspace file
+*.code-workspace

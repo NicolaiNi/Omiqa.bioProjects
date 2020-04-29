@@ -1,0 +1,22 @@
+{
+  "LIPT1": {
+    "SRR4457115_adjacent_normal_1": 200000,
+    "SRR4457116_adjacent_normal_2": 300,
+    "SRR4457117_adjacent_normal_4": 400,
+    "SRR4457118_adjacent_normal_3": 100,
+    "SRR4457119_adjacent_normal_5": 1,
+    "SRR4457120_primary_tumor_1": 1,
+    "SRR4457121_primary_tumor_2": 1,
+    "SRR4457122_primary_tumor_3": 10000
+  },
+  "FBXO38": {
+    "SRR4457115_adjacent_normal_1": 1000,
+    "SRR4457116_adjacent_normal_2": 2,
+    "SRR4457117_adjacent_normal_4": 2,
+    "SRR4457118_adjacent_normal_3": 2,
+    "SRR4457119_adjacent_normal_5": 2,
+    "SRR4457120_primary_tumor_1": 500,
+    "SRR4457121_primary_tumor_2": 800,
+    "SRR4457122_primary_tumor_3": 1
+  }
+}
