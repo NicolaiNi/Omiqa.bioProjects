@@ -141,10 +141,11 @@ var x = d3.scaleBand()
           .domain(conditions)
           .padding(0.01);
 
-svg.append("g")
+var xAxis = svg.append("g")
           .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x))
-           .selectAll("text")	
+          .call(d3.axisBottom(x)).attr("id", "xAxisG");
+
+           xAxis.selectAll("text")	
             .style("text-anchor", "end")
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
@@ -152,17 +153,24 @@ svg.append("g")
                 return "rotate(-65)" 
                 });        
 
+d3.select("g#xAxisG").select("path").remove();
         
 // Build Y scales and axis:
 var y = d3.scaleBand()
           .range([ height, 0 ])
           .domain(genes)
-          .padding(0.01); //0.01
+          .padding(0.01);
 
-svg.append("g")
-          .call(d3.axisLeft(y))
-          .selectAll("text")
+var yAxis = svg.append("g")
+          .call(d3.axisLeft(y)).attr("id", "yAxisG");
+    yAxis.selectAll(".tick text")
           .style("font", "1.5px times");
+    yAxis.selectAll(".tick line")
+          .attr("stroke-width","0.1");
+
+//remove end of axis ticks on yAxis
+d3.select("g#yAxisG").select("path").remove();
+
 
 
 var minValue = data.reduce(function(prev, curr) {
