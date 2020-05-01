@@ -2,21 +2,51 @@ import { GetJSONObject } from "./fetchData.js";
 
 const data = GetJSONObject();
 
-var genes = Object.keys(data).map(item => item);
-var uniqueConditions =[]; // x-axis for heat map
-var transformedData = []; //reordered data structure
+function Genes (d){
+  return Object.keys(d).map(item => item);
+}
 
-for (let index = 0; index < genes.length; index++) {
-    var conditions = d3.keys(data[genes[index]]);
-    for (let j = 0; j < conditions.length; j++) {
-        if(!uniqueConditions.includes(conditions[j])){
-            uniqueConditions.push(conditions[j]);
-        }
-    }
-};
+export function GetGenes (){
+  var genes = Genes(data);
+  return genes; 
+}
+
+function Conditions (sel, d, g){
+ var conditions = [];
+  if (sel.length === 0){
+    conditions = UniqueConditions(d,g); 
+  }
+  else {
+    conditions = sel;
+  }
+  
+  function UniqueConditions (d,g){
+    var uniqueConditions =[]
+    for (let i = 0; i < g.length; i++) {
+      var conds = d3.keys(d[g[i]]);
+      for (let j = 0; j < conds.length; j++) {
+          if(!uniqueConditions.includes(conds[j])){
+              uniqueConditions.push(conds[j]);
+          }
+      }
+    };
+    return uniqueConditions;
+  }
+  return conditions; 
+}
+
+export function GetConditions(selectedConditions){
+  var conditions = Conditions (selectedConditions, data, Genes(data));
+  return conditions;
+}
+
+export function GetTransformedDataHeatMap(selectionConditions){
+var transformedData = []; //reordered data structure
+var genes = Genes(data);  //y-axis for heat map
+var conditions = Conditions(selectionConditions,data,genes);      // x-axis for heat map
 
 //reoder json file to use as input for heatmap           
-uniqueConditions.forEach(cond => {
+conditions.forEach(cond => {
   for (let g = 0; g < genes.length; g++) {
     var aGene = genes[g];
     var aCondition = cond;
@@ -33,7 +63,8 @@ uniqueConditions.forEach(cond => {
     transformedData.push(entry);
    }
 });
-
+return transformedData;
+};
 
 // 
 const groupBy = (array, key) => {
@@ -49,6 +80,10 @@ const groupBy = (array, key) => {
   };
 
 
+export function GetTransformedDataBarChart(){
+
+var selectionDefault = [];
+var transformedData = GetTransformedDataHeatMap(selectionDefault);
 var groupByCondition = groupBy(transformedData,"condition");
 
 var groupByConditionArray = Object.keys(groupByCondition).map(function(key) {
@@ -65,16 +100,10 @@ groupByConditionArray.forEach(condition => {
   sumByCondition.push(entry);
 });
 
-export function GetTransformedDataHeatMap(){
-    return transformedData;
+    return sumByCondition;
 };
 
-export function GetConditions(){
-    return uniqueConditions;
-}
-export function GetGenes(){
-    return genes; 
-}
-export function GetTransformedDataBarChart(){
-  return sumByCondition;
-};
+
+
+
+

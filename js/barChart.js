@@ -1,10 +1,5 @@
 import { GetTransformedDataBarChart, GetTransformedDataHeatMap, GetConditions, GetGenes} from "./transformDataJSON.js";
 
-var selectedBarsIdx = [];
-
-function unique (value, index, self){
-  return self.indexOf(value) === index; 
-};
 
 function BarChart () {
 // set the dimensions and margins of the graph
@@ -53,6 +48,8 @@ g.append("g")
     .attr("class", "tooltip-barChart")
     .style("opacity", 0);
 
+  var selectedBars = [];
+
   g.selectAll(".bar")
     .data(geneExpressionCondition)
     .enter().append("rect")
@@ -80,32 +77,52 @@ g.append("g")
         .duration('50')
         .style("opacity", 0);
     })
-    .on('click', function (d, i) {
-      if (selectedBarsIdx.includes(i)) {
+    .on('click', function (d) {
+      if (selectedBars.includes(d.condition)) {
         d3.select(this).transition()
           .duration('50')
           .style("fill", "LightSteelblue");
 
-        selectedBarsIdx.splice(selectedBarsIdx.indexOf(i), 1);
+        selectedBars.splice(selectedBars.indexOf(d.condition), 1);
       } else {
         d3.select(this).transition()
           .duration('50')
           .attr("class", "barSelected")
           .style('fill', 'SteelBlue');
-
-        selectedBarsIdx.push(i);
+        // fill array with selected bars
+        selectedBars.push(d.condition);
       }
     });
+    var defaultSelAll = GetConditions ([]);
+    HeatMap(defaultSelAll);
+
+    var button = d3.select("#buttonSelect")
+              .on("click",function(){
+                if(selectedBars.length===0){
+                  selectedBars = GetConditions ([]);
+                }
+                HeatMap(selectedBars);
+              })
 };
 
 BarChart();
 
-function HeatMap (){
+function HeatMap (selectionBarChart){
 // set the dimensions and margins of the graph
-var margin = {top: 30, right: 30, bottom: 200, left: 50},
-  width = 1000 - margin.left - margin.right,
-  height = 1000 - margin.top - margin.bottom;
+var margin = {top: 30, right: 30, bottom: 200, left: 50};
 
+var removeMargin = 0;
+if(selectionBarChart.length ===1){
+  removeMargin = margin.left + margin.right;
+}
+
+var scalingFactor = 50*selectionBarChart.length + removeMargin,
+
+  width = scalingFactor - margin.left - margin.right,
+  height = 1000 - margin.top - margin.bottom;
+if(!d3.select("svg").empty()){
+  d3.select("#heatMap").select("svg").remove();
+}
 // append the svg object to the body of the page
 var svg = d3.select("#heatMap")
             .append("svg")
@@ -113,16 +130,15 @@ var svg = d3.select("#heatMap")
               .attr("height", height + margin.top + margin.bottom)
             .append("g")
               .attr("transform",
-                    "translate(" + margin.left + "," + margin.top + ")");
-          
+                    "translate(" + margin.left + "," + margin.top + ")");     
 // Build X scales and axis:
-const uniqueConditions = GetConditions();
+const conditions = GetConditions(selectionBarChart);
 const genes = GetGenes(); 
-const data = GetTransformedDataHeatMap(); 
+const data = GetTransformedDataHeatMap(selectionBarChart); 
 
 var x = d3.scaleBand()
           .range([ 0, width ])
-          .domain(uniqueConditions)
+          .domain(conditions)
           .padding(0.01);
 
 svg.append("g")
@@ -201,8 +217,7 @@ svg.selectAll()
   .on("mouseover", mouseover)
   .on("mousemove", mousemove)
   .on("mouseleave", mouseleave);
-//});
+
 };
 
-HeatMap();
   
